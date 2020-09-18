@@ -1,0 +1,34 @@
+name: test
+on: push
+jobs:
+  simple:
+    name: Bare
+    runs-on: ubuntu-latest
+    steps:
+      - name: get code
+        uses: actions/checkout@v2
+      - name: install prerequisites
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y qemu-utils
+      - name: build image
+        run: |
+          sudo sh -x alpine-make-vm-image --branch 3.12 --image-format qcow2 --image-size 250M -- simple.qcow2
+  docker-priv:
+    name: Docker --privileged
+    runs-on: ubuntu-latest
+    steps:
+      - name: get code
+        uses: actions/checkout@v2
+      - name: --privileged
+        run: |
+          make -C example/docker simple-priv
+  docker-caps:
+    name: Docker capabilities
+    runs-on: ubuntu-latest
+    steps:
+      - name: get code
+        uses: actions/checkout@v2
+      - name: capabilities
+        run: |
+          make -C example/docker simple-cap
