@@ -15,20 +15,42 @@ jobs:
         run: |
           sudo sh -x alpine-make-vm-image --branch 3.12 --image-format qcow2 --image-size 250M -- simple.qcow2
   docker-priv:
-    name: Docker --privileged
+    name: Docker privileged
     runs-on: ubuntu-latest
     steps:
       - name: get code
         uses: actions/checkout@v2
-      - name: --privileged
+      - name: build image
         run: |
+          uname -a
           make -C example/docker simple-priv
+  docker-priv-guestfs:
+    name: Docker privileged guestfs
+    runs-on: ubuntu-latest
+    steps:
+      - name: get code
+        uses: actions/checkout@v2
+      - name: build image
+        run: |
+          uname -a
+          make -C example/docker OPTS=--guestfs simple-priv
   docker-caps:
     name: Docker capabilities
     runs-on: ubuntu-latest
     steps:
       - name: get code
         uses: actions/checkout@v2
-      - name: capabilities
+      - name: build image
         run: |
+          uname -a
           make -C example/docker simple-cap
+  docker-caps-guestfs:
+    name: Docker capabilities guestfs
+    runs-on: ubuntu-latest
+    steps:
+      - name: get code
+        uses: actions/checkout@v2
+      - name: build image
+        run: |
+          uname -a
+          make -C example/docker OPTS=--guestfs simple-cap
